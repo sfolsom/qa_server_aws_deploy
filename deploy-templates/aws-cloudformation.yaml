@@ -363,8 +363,7 @@ Resources:
               'ecs:Poll', 'ecs:RegisterContainerInstance', 'ecs:StartTelemetrySession',
               'ecs:UpdateContainerInstancesState', 'ecs:Submit*', 'ecr:GetAuthorizationToken',
               'ecr:BatchCheckLayerAvailability', 'ecr:GetDownloadUrlForLayer',
-              'ecr:BatchGetImage', 'logs:CreateLogStream', 'logs:PutLogEvents', 'elasticfilesystem:ClientMount',
-              'elasticfilesystem:ClientWrite']
+              'ecr:BatchGetImage', 'logs:CreateLogStream', 'logs:PutLogEvents']
             Resource: '*'
 #  If you would rather use the AWS managed policy than the above custom policy, use this:
 #      ManagedPolicyArns:
@@ -435,8 +434,7 @@ Resources:
               'elasticloadbalancing:DeregisterTargets', 'elasticloadbalancing:Describe*', 
               'elasticloadbalancing:RegisterInstancesWithLoadBalancer',
               'elasticloadbalancing:RegisterTargets', 'ec2:Describe*', 
-              'ec2:AuthorizeSecurityGroupIngress', 'elasticfilesystem:ClientMount',
-              'elasticfilesystem:ClientWrite']
+              'ec2:AuthorizeSecurityGroupIngress']
             Resource: '*'
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
