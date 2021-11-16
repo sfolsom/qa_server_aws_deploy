@@ -178,7 +178,7 @@ Resources:
         - Field: "instanceId"
           Type: "spread"
       SchedulingStrategy: "REPLICA"
-      ServiceName: "qa-server-service-2"
+      ServiceName: !Join ["", [!Ref AWS::StackName, "-service"]]
       TaskDefinition: !Ref TaskDefinitionName
   ACMCert:
     Type: AWS::CertificateManager::Certificate

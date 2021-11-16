@@ -133,7 +133,7 @@ Resources:
             Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}
           - Effect: Allow
             Action: ['s3:AbortMultipartUpload', 's3:DeleteObject', 's3:GetObject', 's3:ListMultipartUploadParts', 's3:PutObjectTagging', 's3:GetObjectTagging', 's3:PutObject']
-            Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}
+            Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}/*
   S3ToEfsTask:
     Type: AWS::DataSync::Task
     Properties:
