@@ -178,7 +178,7 @@ Resources:
         - Field: "instanceId"
           Type: "spread"
       SchedulingStrategy: "REPLICA"
-      ServiceName: "qa-server-service-2"
+      ServiceName: !Join ["", [!Ref AWS::StackName, "-service"]]
       TaskDefinition: !Ref TaskDefinitionName
   ACMCert:
     Type: AWS::CertificateManager::Certificate
@@ -363,7 +363,8 @@ Resources:
               'ecs:Poll', 'ecs:RegisterContainerInstance', 'ecs:StartTelemetrySession',
               'ecs:UpdateContainerInstancesState', 'ecs:Submit*', 'ecr:GetAuthorizationToken',
               'ecr:BatchCheckLayerAvailability', 'ecr:GetDownloadUrlForLayer',
-              'ecr:BatchGetImage', 'logs:CreateLogStream', 'logs:PutLogEvents']
+              'ecr:BatchGetImage', 'logs:CreateLogStream', 'logs:PutLogEvents', 'elasticfilesystem:ClientMount',
+              'elasticfilesystem:ClientWrite']
             Resource: '*'
 #  If you would rather use the AWS managed policy than the above custom policy, use this:
 #      ManagedPolicyArns:
@@ -434,7 +435,8 @@ Resources:
               'elasticloadbalancing:DeregisterTargets', 'elasticloadbalancing:Describe*', 
               'elasticloadbalancing:RegisterInstancesWithLoadBalancer',
               'elasticloadbalancing:RegisterTargets', 'ec2:Describe*', 
-              'ec2:AuthorizeSecurityGroupIngress']
+              'ec2:AuthorizeSecurityGroupIngress', 'elasticfilesystem:ClientMount',
+              'elasticfilesystem:ClientWrite']
             Resource: '*'
   EC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
