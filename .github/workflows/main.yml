@@ -2,11 +2,6 @@
 
 name: Redeploy
 
-env:
-    ECR_REPOSITORY: 'ld4p/qa_authority_lookup-int'
-    ECS_CLUSTER: 'lookup-int-deploy-cluster'
-    ECS_SERVICE: 'lookup-int-deploy-service'
-
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the dev branch
@@ -42,5 +37,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Force Deploy
+        env:
+          ECR_REPOSITORY: 'ld4p/qa_authority_lookup-int'
+          ECS_CLUSTER: 'lookup-int-deploy-cluster'
+          ECS_SERVICE: 'lookup-int-deploy-service'
         run: aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
 
