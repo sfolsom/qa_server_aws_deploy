@@ -1,0 +1,26 @@
+# Manually sync config files from the main branch with production S3 bucket.
+# * copy config/authorities to S3/config/authorities
+# * copy config/locale to S3/config/locale
+name: sync-s3-prod
+
+on:
+  workflow_dispatch:  # allow for manually running through Actions tab
+  push:
+    branches: [ main ] # auto-run when files in listed paths change in the main branch
+
+jobs:
+  s3_update:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@master
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_REGION: 'us-east-1'
+          SOURCE_DIR: 'config'
+          DEST_DIR: 'config'
