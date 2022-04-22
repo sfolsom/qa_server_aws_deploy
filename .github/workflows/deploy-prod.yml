@@ -1,0 +1,33 @@
+# Manually deploy code in the main branch to the ECS production server.
+name: redeploy-prod
+
+on:
+  workflow_dispatch:  # allow for manually running through Actions tab
+#  push:
+#    branches: [ main ] # auto-run when the repo is released.  -- TURNED OFF --
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      #- uses: actions/checkout@v3
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Force Deploy
+        env:
+          ECR_REPOSITORY: 'ld4p/qa_authority_lookup-prod'
+          ECS_CLUSTER: 'lookup-prod-deploy-cluster'
+          ECS_SERVICE: 'lookup-prod-deploy-service'
+        run: aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment
