@@ -1,9 +1,12 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >
   1. Review the parameters below and ensure that they are appropriate to your environment. Then deploy with this aws cli command:
-    aws cloudformation create-stack --stack-name qa-server-prerequisites \
-    --template-body file://./aws-prerequisites.yaml \
-    --parameters file://./prerequisites.env
+    aws cloudformation create-stack --stack-name qa-server-resources \
+        --profile qa-user \
+        --template-body file://./aws-resources.yaml \
+        --parameters file://./resources-parameters.env \
+        --role-arn arn:aws:iam::<your_account_id>:role/qa-role \
+        --capabilities CAPABILITY_IAM
   2. The outputs of this template file will be used by the aws-cloudformation.yaml template.
 Parameters:
   AWSVpcId:
@@ -133,7 +136,7 @@ Resources:
             Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}
           - Effect: Allow
             Action: ['s3:AbortMultipartUpload', 's3:DeleteObject', 's3:GetObject', 's3:ListMultipartUploadParts', 's3:PutObjectTagging', 's3:GetObjectTagging', 's3:PutObject']
-            Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}
+            Resource: !Sub arn:${AWS::Partition}:s3:::${S3BucketName}/*
   S3ToEfsTask:
     Type: AWS::DataSync::Task
     Properties:
@@ -158,4 +161,3 @@ Outputs:
     Value: !Ref DatabaseAccessPoint
   S3ToEfsTask:
     Value: !Ref S3ToEfsTask
-    

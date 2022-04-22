@@ -1,11 +1,13 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: >
-  1. Make a copy of parameters.env.example and rename it to parameters.env, then populate it with the values appropriate to your environment. CloudFormation will read those values from the file if you pass it on the command line when you create or update the stack. See the parameter definitions below for full instructions.
+  1. Make a copy of deploy-parameters.env.example and rename it to deploy-parameters.env, then populate it with the values appropriate to your environment. CloudFormation will read those values from the file if you pass it on the command line when you create or update the stack. See the parameter definitions below for full instructions.
   2. Navigate to the directory that contains these files and run the following aws cli command:
   aws cloudformation create-stack --stack-name qa-server \
-  --template-body file://./aws-cloudformation.yaml \
-  --parameters file://./parameters-copy.env --capabilities CAPABILITY_NAMED_IAM \
-  --profile qa-useer --role-arn arn:aws:iam::<your_account_id>:role/qa-role
+      --profile qa-user \
+      --template-body file://./aws-deploy.yaml \
+      --parameters file://./deploy-parameters.env \
+      --role-arn arn:aws:iam::<your_account_id>:role/qa-role \
+      --capabilities CAPABILITY_NAMED_IAM
   3. You will need to validate the ACM certificate after the stack has been created, by creating the DNS record that will appear in the CloudFormation and ACM consoles.
   
 Parameters:
@@ -23,11 +25,11 @@ Parameters:
   S3BucketName:
     Type: String
     Default: ''
-    Description: Name of the S3 bucket where the environment file resides.  If you ran the prerequisites template, this value should match the one you used in that template.
+    Description: Name of the S3 bucket where the environment file resides.  If you ran the resource allocation template, this value should match the one you used in that template.
   EnvFileName:
     Type: String
     Default: ''
-    Description: Name of the environment file. The environment file must exist prior to running this template, or else the application will fail to launch. You can use a copy of the parameters.env.example file, populated with values appropriate to your environment.
+    Description: Name of the environment file. The environment file must exist prior to running this template, or else the application will fail to launch. You can use a copy of the deploy-parameters.env.example file, populated with values appropriate to your environment.
   ImageLocation:
     Type: String
     Default: ''
@@ -178,7 +180,7 @@ Resources:
         - Field: "instanceId"
           Type: "spread"
       SchedulingStrategy: "REPLICA"
-      ServiceName: "qa-server-service-2"
+      ServiceName: !Join ["", [!Ref AWS::StackName, "-service"]]
       TaskDefinition: !Ref TaskDefinitionName
   ACMCert:
     Type: AWS::CertificateManager::Certificate
