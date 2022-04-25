@@ -27,3 +27,11 @@ jobs:
           AWS_REGION: 'us-east-1'
           SOURCE_DIR: 'config'
           DEST_DIR: 'config'
+  app_reload:
+    needs: s3_update
+    runs-on: ubuntu-latest
+    environment: integration
+    steps:
+      - name: reload authorities
+        run:
+          curl https://qa-server-service-int.library.cornell.edu/authorities/reload/linked_data/authorities${{ secrets.AUTHENTICATE_RELOAD }}
