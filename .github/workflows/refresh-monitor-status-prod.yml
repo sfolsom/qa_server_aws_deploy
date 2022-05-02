@@ -13,5 +13,7 @@ jobs:
     environment: production
     steps:
       - name: Refresh all tests and stats for the monitor status page
+        env:
+          AUTHENTICATE_RELOAD: ${{ secrets.AUTHENTICATE_RELOAD }}
         run:
-          curl https://qa-server-service.library.cornell.edu/monitor_status{{ secrets.AUTHENTICATE_RELOAD }}&refresh=all
+          curl https://qa-server-service.library.cornell.edu/monitor_status$AUTHENTICATE_RELOAD&refresh=all
