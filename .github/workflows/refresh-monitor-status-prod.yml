@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Refresh all tests and stats for the monitor status page
         run:
-          curl https://qa-server-service.library.cornell.edu/monitor_status{{ secrets.AUTHENTICATE_RELOAD }}&refresh=all
+          curl https://qa-server-service.library.cornell.edu/monitor_status?refresh=all&${{ secrets.AUTHENTICATE_RELOAD }}
